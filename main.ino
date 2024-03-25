@@ -39,3 +39,52 @@ void interface() {
 
 void temporizador() {
 }
+
+void sensor_fluxo() {
+  if ((millis() - tempo_antes) > 1000) {
+
+
+    //desabilita a interrupcao para realizar a conversao do valor de pulsos
+    detachInterrupt(INTERRUPCAO_SENSOR);
+
+
+    //conversao do valor de pulsos para L/min
+    fluxo = ((1000.0 / (millis() - tempo_antes)) * contador) / FATOR_CALIBRACAO;
+
+
+    //exibicao do valor de fluxo
+    Serial.print("\nFluxo de: ");
+    Serial.print(fluxo);
+    Serial.println(" L/min");
+
+
+    //calculo do volume em L passado pelo sensor
+    volume = fluxo / 60;
+
+
+    //armazenamento do volume
+    volume_total += volume;
+
+
+    //exibicao do valor de volume
+    Serial.print("Volume: ");
+    Serial.print(volume_total);
+    Serial.println(" L");
+
+
+    //reinicializacao do contador de pulsos
+    contador = 0;
+
+
+    //atualizacao da variavel tempo_antes
+    tempo_antes = millis();
+
+
+    //contagem de pulsos do sensor
+    attachInterrupt(INTERRUPCAO_SENSOR, contador_pulso, FALLING);
+  }
+}
+
+void contador_pulso() {
+  contador++;
+}
