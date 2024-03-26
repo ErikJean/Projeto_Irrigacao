@@ -45,16 +45,20 @@ void loop() {
   if (leitura == '1') {
     temporizador();
   }
+
+  else if (leitura == '2') {
+    cronometro();
+  }
 }
 
 void interface() {
   leitura = '.';
-  Serial.print("\n-----------------------\n");
+  Serial.print("\n--------------------------\n");
   Serial.print("\n Software de Automação");
   Serial.print("\n 1 - Temporizador");
-  Serial.print("\n 2 - Cronometro\n");
+  Serial.print("\n 2 - Cronometro (Iniciar)\n");
   Serial.print("\n Escolha uma opção:\n");
-  Serial.print("\n-----------------------\n");
+  Serial.print("\n--------------------------\n");
 
 
   while (leitura != '1' && leitura != '2') {
@@ -133,6 +137,31 @@ void temporizador() {
   }
 }
 
+void cronometro() {
+  tempo = millis();
+  digitalWrite(RELE_VALVULA, LOW);
+  digitalWrite(RELE_BOMBA, LOW);
+  volume_total = 0;
+
+  while (leitura != '0') {
+    sensor_fluxo();
+  }
+
+  if (leitura == '0') {
+    digitalWrite(RELE_BOMBA, HIGH);
+    digitalWrite(RELE_VALVULA, HIGH);
+    tempo = millis() - tempo;
+    Serial.print("\n----------------------------\n");
+    Serial.print("\n Tempo cronometrado - ");
+    Serial.print(tempo / 3600000);
+    Serial.print(":");
+    Serial.print(((tempo / 1000) / 60) % 60);
+    Serial.print(":");
+    Serial.println((tempo / 1000) % 60);
+    Serial.print("\n----------------------------\n");
+  }
+}
+
 void sensor_fluxo() {
   if ((millis() - tempo_antes) > 1000) {
 
@@ -169,7 +198,7 @@ void sensor_fluxo() {
     Serial.print(" Volume: ");
     Serial.print(volume_total);
     Serial.println(" L");
-    Serial.print("\n (0 - SAIR)\n");
+    Serial.print("\n (0 - PARAR)\n");
     Serial.print("\n----------------------\n");
 
 
