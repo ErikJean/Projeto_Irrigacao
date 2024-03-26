@@ -129,7 +129,7 @@ void temporizador() {
     while (millis() < tempo && leitura != '0') {
       digitalWrite(RELE_VALVULA, LOW);
       digitalWrite(RELE_BOMBA, LOW);
-      sensor_fluxo();
+      sensor_fluxo(false);
     }
 
     digitalWrite(RELE_BOMBA, HIGH);
@@ -147,7 +147,7 @@ void cronometro() {
     if (Serial.available() > 0) {
       leitura = Serial.read();
     }
-    sensor_fluxo();
+    sensor_fluxo(true);
   }
 
   if (leitura == '0') {
@@ -165,7 +165,7 @@ void cronometro() {
   }
 }
 
-void sensor_fluxo() {
+void sensor_fluxo(bool temp_cron) {
   if ((millis() - tempo_antes) > 1000) {
 
 
@@ -200,12 +200,27 @@ void sensor_fluxo() {
     //exibicão do valor de volume
     Serial.print(" Volume: ");
     Serial.print(volume_total);
-    Serial.println(" L\n ");
-    Serial.print((millis() - tempo) / 3600000);
-    Serial.print(":");
-    Serial.print((((millis() - tempo) / 1000) / 60) % 60);
-    Serial.print(":");
-    Serial.print(((millis() - tempo) / 1000) % 60);
+    Serial.println(" L\n");
+    Serial.print(" ");
+
+
+    if (temp_cron) {
+      Serial.print((millis() - tempo) / 3600000);
+      Serial.print(":");
+      Serial.print((((millis() - tempo) / 1000) / 60) % 60);
+      Serial.print(":");
+      Serial.print(((millis() - tempo) / 1000) % 60);
+    }
+
+    else {
+      Serial.print((tempo - millis()) / 3600000);
+      Serial.print(":");
+      Serial.print((((tempo - millis()) / 1000) / 60) % 60);
+      Serial.print(":");
+      Serial.print(((tempo - millis()) / 1000) % 60);
+    }
+
+    
     Serial.println(" (0 - PARAR)");
     Serial.print("\n----------------------\n");
 
