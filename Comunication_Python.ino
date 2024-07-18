@@ -18,8 +18,6 @@ void setup() {
 }
 
 void loop() {
-  noInterrupts();
-
   if(Serial.available()) {
     caractere = Serial.read();
 
@@ -30,7 +28,7 @@ void loop() {
 
     else if(caractere == '-') {
       irrigando = mensagem.toInt();
-      mensasagem = "";
+      mensagem = "";
     }
 
     else {
@@ -39,7 +37,6 @@ void loop() {
   }
 
   if((millis() - tempo_gravado) > 1000) {
-    Serial.flush();
     Serial.print("<");
     Serial.print(irrigando);
     Serial.print(";");
