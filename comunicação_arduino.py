@@ -24,14 +24,14 @@ irrigando = int(input("Iniciar a irrigação (0 ou 1)? "))
 fator_calibracao = float(input("Defina o fator de calibração: "))
 
 if(volume != -1):
-    mensagem_enviada = str(irrigando) + "-" + str(fator_calibracao) + ";" + str(volume) + "*" 
+    mensagem_enviada = str(fator_calibracao) + ";" + str(volume) + "*" + str(irrigando) + "-"
     arduino.write(mensagem_enviada.encode())
     arduino.flush()
 
 while(True):
     while(arduino.inWaiting() > 0):
-        mensagem_recebida += arduino.readline(1).decode()
+        mensagem_recebida += arduino.readline(1).decode() # Tratar pois o ESP envia caracteres aleatórios
 
     print(mensagem_recebida)
     mensagem_recebida = ""
-    time.sleep(1)
+    time.sleep(2)
