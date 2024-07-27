@@ -69,6 +69,11 @@ void loop() {
   while (irrigando == 1) {
     sensorFluxo();
 
+    if (irrigando == 0) {
+          detachInterrupt(digitalPinToInterrupt(PINO_SENSOR));
+          tempoGravado = 0;
+    }
+
     if (Serial.available()) {  // Leitura da comunicação
       caractere = Serial.read();
 
