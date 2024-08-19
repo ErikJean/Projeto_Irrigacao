@@ -50,7 +50,7 @@ void loop() {
       // Desabilita a interrupcão
       detachInterrupt(digitalPinToInterrupt(PINO_SENSOR));
 
-      volumeTotal = ((5.5 * 1000) / 60) * contador;
+      volumeTotal = (1040 / 333) * contador;
 
       SerialBT.print("\n----------------------\n");
       SerialBT.print("\n Volume irrigado: ");
@@ -67,7 +67,7 @@ void loop() {
       // Desabilita a interrupcão
       detachInterrupt(digitalPinToInterrupt(PINO_SENSOR));
 
-      volumeTotal = ((5.5 * 1000) / 60) * contador;
+      volumeTotal = (1040 / 333) * contador;
 
       SerialBT.print("\n----------------------\n");
       SerialBT.print("\n Volume irrigado: ");
@@ -179,10 +179,6 @@ void cronometro() {
   digitalWrite(RELE_BOMBA, HIGH);
 
   while (leitura != '0') {
-    if (SerialBT.available() > 0) {
-      leitura = SerialBT.read();
-    }
-
     sensorFluxo(true);
   }
 
