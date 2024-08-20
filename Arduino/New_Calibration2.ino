@@ -21,12 +21,12 @@ unsigned long contador = 0;
 unsigned long tempo;
 long int tempo_escolhido = 0;
 char leitura;
+String str = "";
 
 // Variável utilizada para exibir volume total de água
 float volumeTotal;
 
-int calibracaoVolume = 1040;
-int calibracaoPulsos = 333;
+float valorCalibracao = 3.12;
 
 void setup() {
   Serial.begin(115200);
@@ -53,7 +53,7 @@ void loop() {
       // Desabilita a interrupcão
       detachInterrupt(digitalPinToInterrupt(PINO_SENSOR));
 
-      volumeTotal = (calibracaoVolume / calibracaoPulsos) * contador;
+      volumeTotal = valorCalibracao * contador;
 
       SerialBT.print("\n----------------------\n");
       SerialBT.print("\n Volume irrigado: ");
@@ -70,7 +70,7 @@ void loop() {
       // Desabilita a interrupcão
       detachInterrupt(digitalPinToInterrupt(PINO_SENSOR));
 
-      volumeTotal = (calibracaoVolume / calibracaoPulsos) * contador;
+      volumeTotal = valorCalibracao * contador;
 
       SerialBT.print("\n----------------------\n");
       SerialBT.print("\n Volume irrigado: ");
@@ -90,9 +90,7 @@ void interface() {
   leitura = '.';
   SerialBT.print("\n--------------------------\n");
   SerialBT.print("\n Software de Automação (");
-  SerialBT.print(calibracaoVolume);
-  SerialBT.print("/");
-  SerialBT.print(calibracaoPulsos);
+  SerialBT.print(valorCalibracao);
   SerialBT.print(")\n");
   SerialBT.print("\n 1 - Temporizador");
   SerialBT.print("\n 2 - Cronometro (Iniciar)");
@@ -101,7 +99,7 @@ void interface() {
   SerialBT.print("\n--------------------------\n");
 
 
-  while (leitura != '1' && leitura != '2') {
+  while (leitura != '1' && leitura != '2' && leitura != '3') {
 
     if (SerialBT.available() > 0) {
       leitura = SerialBT.read();
@@ -211,19 +209,16 @@ void cronometro() {
 }
 
 void calibracao() {
+  str = "";
+  
   while (true) {
     if (SerialBT.available() > 0) {
-      calibracaoVolume = SerialBT.parseInt();
+      str = SerialBT.readString();
       break;
     }
   }
 
-  while (true) {
-    if (SerialBT.available() > 0) {
-      calibracaoPulsos = SerialBT.parseInt();
-      break;
-    }
-  }
+  valorCalibracao = str.toFloat();
 }
 
 void sensorFluxo(bool temp_cron) {
