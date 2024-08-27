@@ -103,6 +103,7 @@ void loop() {
 
       SerialBT.printf("\nFluxo de: %f L/min", fluxo);
       SerialBT.printf("\nVolume: %f mL\n", volumeTotal);
+      tempo++;
     }
 
     digitalWrite(RELE_VALVULA, LOW);
